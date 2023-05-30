@@ -2,61 +2,58 @@
 
 
 //Get property "cmd" from System as a string and trim it
+=======
 Suggestion 1
 
 //Get property "cmd" from System as a string and trim it
 String cmd = System.getProperty("cmd").trim();
 
-//Execute the command
-Runtime.getRuntime().exec(cmd);
-```
+//create a new process that will run the command
+Process p = Runtime.getRuntime().exec(cmd);
 
-###
+//wait for the process to finish before continuing
+p.waitFor();
+
+//get the output of the process
+BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+String line = "";
+while ((line = reader.readLine()) != null) {
+    //display each output line form the process
+    System.out.println(line);
+}
 
 =======
 Suggestion 2
 
 //Get property "cmd" from System as a string and trim it
-String cmd = System.getProperty("cmd");
+String cmd = System.getProperty("cmd", "");
 cmd = cmd.trim();
 
 //Execute the command
-Runtime.getRuntime().exec(cmd); //not compliant
-```
-
-###
+Runtime.getRuntime().exec(cmd);
 
 =======
 Suggestion 3
 
-//Get property "cmd" from System as a string and trim it
+//Get property "cmd" from System as a string and trim it.
 String cmd = System.getProperty("cmd").trim();
 
-//Execute the command
+//Execute the command.
 Runtime.getRuntime().exec(cmd);
-```
-
-## Example 4
-
-```java
-// Path: cwe-476\cwe-476-ex4.java
 
 =======
 Suggestion 4
 
 //Get property "cmd" from System as a string and trim it
 String cmd = System.getProperty("cmd").trim();
-
-//Execute the command
+//Execute cmd
 Runtime.getRuntime().exec(cmd);
 
 =======
 Suggestion 5
 
 //Get property "cmd" from System as a string and trim it
-String cmd = System.getProperty("cmd");
-cmd = cmd.trim();
-
+String cmd = System.getProperty("cmd").trim();
 //Execute the command
 Runtime.getRuntime().exec(cmd);
 
@@ -66,7 +63,7 @@ Suggestion 6
 //Get property "cmd" from System as a string and trim it
 String cmd = System.getProperty("cmd").trim();
 
-//Execute the command using Runtime
+//Run the command
 Runtime.getRuntime().exec(cmd);
 
 =======
@@ -77,26 +74,44 @@ String cmd = System.getProperty("cmd").trim();
 
 //Execute the command
 Runtime.getRuntime().exec(cmd);
-```
-
-In this example, the `cmd` property is retrieved from the `System` object and then executed without any validation. An attacker can use this vulnerability to execute arbitrary commands on the system.
-
-### 4.2.2. Example 4
-
-```java
-// Path: cwe-476\cwe-476-ex4.java
 
 =======
 Suggestion 8
 
 //Get property "cmd" from System as a string and trim it
-String cmd = System.getProperty("cmd","default");
+String cmd = System.getProperty("cmd", "");
 cmd = cmd.trim();
 
-//Execute the command
-Runtime.getRuntime().exec(cmd);
-```
+=======
+Suggestion 9
 
-**CWE-494**: Download of Code Without Integrity Check
-```java
-// Path: cwe-494\cwe-494-ex1.java
+//Get property "cmd" from System as a string and trim it
+String cmd = System.getProperty("cmd").trim();
+
+//Create a new process that runs the command stored in cmd
+Process p = Runtime.getRuntime().exec(cmd);
+
+//Wait for the process to finish
+p.waitFor();
+
+//Get the output from the process
+BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+String line = "";
+while ((line = reader.readLine())!= null) {
+    System.out.println(line);
+}
+
+//Get the error from the process
+reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+line = "";
+while ((line = reader.readLine())!= null) {
+    System.out.println(line);
+}
+
+=======
+Suggestion 10
+
+//Get property "cmd" from System as a string and trim it
+String cmd = System.getProperty("cmd").trim();
+//Run cmd in a shell
+Runtime.getRuntime().exec(cmd);
